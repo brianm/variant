@@ -1,9 +1,9 @@
 package variant
 
 import (
-    "testing"
 	"expvar"
 	"fmt"
+	"testing"
 )
 
 func TestFullBehavior(t *testing.T) {
@@ -53,3 +53,11 @@ func TestStringMatchesAverage(t *testing.T) {
 	}
 }
 
+func TestSliceBehavior(t *testing.T) {
+	ary := make([]int, 0)
+	ary = append(ary, 1)
+	ary = append(ary, 2)
+	if len(ary) != 2 {
+		t.Errorf("expected len=2, got len=%d", len(ary))
+	}
+}

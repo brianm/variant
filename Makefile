@@ -10,4 +10,4 @@ clean:
 	rm -rf pkg
 
 godoc:
-	GOPATH=$(PWD):$(PWD)/ext godoc -http=:6060
+	GOPATH=$(PWD) godoc -http=:6060
