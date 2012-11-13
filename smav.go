@@ -24,13 +24,28 @@ type SimpleMovingStat struct {
 	calculate func(*SimpleMovingStat) float64
 }
 
-// Crate a new simple moving median expvar.Var. It will be
+
+
+// Create a new simple moving median expvar.Var. It will be
 // published under `name` and maintain `size` values for
 // calculating the median. 
 //
 // An empty name will cause it to not be published
-
+//
+// This is just a convenience helper for a SimpleMovingPercentile
 func NewSimpleMovingMedian(name string, size int) *SimpleMovingStat {
+	return NewSimpleMovingPercentile(name, 0.50, size)
+
+}
+
+// Create a new simple moving percentile expvar.Var. It will be
+// published under `name` and maintain `size` values for
+// calculating the percentile.
+//
+// percentile must be between 0 and 1 
+//
+// An empty name will cause it to not be published
+func NewSimpleMovingPercentile(name string, percentile float64, size int) *SimpleMovingStat {
 	sm := new(SimpleMovingStat)
 	sm.size = size
 	sm.mutex = new(sync.Mutex)
@@ -48,7 +63,7 @@ func NewSimpleMovingMedian(name string, size int) *SimpleMovingStat {
 			return 0.0
 		}
 		sort.Float64s(ary)
-		mid := len(ary) / 2
+		mid := int(float64(len(ary)) * percentile)
 		return ary[mid]
 	}
 
@@ -59,7 +74,8 @@ func NewSimpleMovingMedian(name string, size int) *SimpleMovingStat {
 
 }
 
-// Crate a new simple moving average expvar.Var. It will be
+
+// Create a new simple moving average expvar.Var. It will be
 // published under `name` and maintain `size` values for
 // calculating the average. 
 //
