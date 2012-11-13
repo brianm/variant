@@ -11,7 +11,7 @@ func TestFullBehavior(t *testing.T) {
 	sma.Update(1)
 	sma.Update(2)
 	sma.Update(3)
-	avg := sma.Average()
+	avg := sma.Value()
 	if avg != 2.0 {
 		t.Errorf("expected abg of 2.0, got %f", avg)
 	}
@@ -21,7 +21,7 @@ func TestPartialBehavior(t *testing.T) {
 	sma := NewSimpleMovingAverage("", 3)
 	sma.Update(1)
 	sma.Update(2)
-	avg := sma.Average()
+	avg := sma.Value()
 	if avg != 1.5 {
 		t.Errorf("expected avg of 1.5, got %f", avg)
 	}
@@ -34,7 +34,7 @@ func TestMovedPastInitialBehavior(t *testing.T) {
 	sma.Update(2)
 	sma.Update(2)
 
-	avg := sma.Average()
+	avg := sma.Value()
 	if avg != 2.0 {
 		t.Errorf("expected avg of 2.0, got %f", avg)
 	}
