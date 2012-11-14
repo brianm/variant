@@ -107,13 +107,13 @@ func NewSimpleMovingAverage(name string, size int) *SimpleMovingStat {
 func (s *SimpleMovingStat) String() string {
 	v := s.Value()
 	if math.IsNaN(v) {
-		return "NaN"
+		return `"NaN"`
 	}
 	if math.IsInf(v, 1) {
-		return "+Infinity"
+		return `"+Infinity"`
 	}
 	if math.IsInf(v, -1) {
-		return "-Infinity"
+		return `"-Infinity"`
 	}
 	return fmt.Sprintf("%f", s.Value())
 }
