@@ -11,6 +11,7 @@ import (
 	"container/ring"
 	"expvar"
 	"fmt"
+	"math"
 	"sort"
 	"sync"
 )
@@ -23,8 +24,6 @@ type SimpleMovingStat struct {
 	values    *ring.Ring
 	calculate func(*SimpleMovingStat) float64
 }
-
-
 
 // Create a new simple moving median expvar.Var. It will be
 // published under `name` and maintain `size` values for
@@ -74,7 +73,6 @@ func NewSimpleMovingPercentile(name string, percentile float64, size int) *Simpl
 
 }
 
-
 // Create a new simple moving average expvar.Var. It will be
 // published under `name` and maintain `size` values for
 // calculating the average. 
@@ -107,6 +105,16 @@ func NewSimpleMovingAverage(name string, size int) *SimpleMovingStat {
 
 // display the value as a string
 func (s *SimpleMovingStat) String() string {
+	v := s.Value()
+	if math.IsNaN(v) {
+		return "NaN"
+	}
+	if math.IsInf(v, 1) {
+		return "+Infinity"
+	}
+	if math.IsInf(v, -1) {
+		return "-Infinity"
+	}
 	return fmt.Sprintf("%f", s.Value())
 }
 
